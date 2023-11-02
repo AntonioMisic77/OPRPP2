@@ -1,0 +1,86 @@
+Napravio sam novog IWebWorkera imena TimeWorker i mapirao za njega rutu /mi/vrijeme
+
+
+Napravio sam 2 smart scripte, jedna je time.smscp, koja prikazuje timestamp i pozadinu, na random
+druga skripta se zove choosing.smscp, koja predstavlja formu za selektiranje pozadine koju zelimo.
+
+
+OVO JE time.smscp
+
+<!DOCTYPE html>
+<html>
+<body>
+ <form method="GET" action="/mi/vrijeme?background=pozadina">
+  <label>Choose whitch background would you like.</label>
+  <select name="pozadina">
+  <option value="Pozadina1.png">JAVA </option>
+  <option value="Pozadina2.png">POSTGRESQL </option>
+  </select>
+ </form>
+</body>
+</html>
+
+OVO JE choosing.smscp
+
+<!DOCTYPE html>
+<html>
+<head>
+ <style>
+   body {background-image: url('../images/{$= "background" 0 @tparamGet $}')}
+ </style>
+</head>
+<body>
+{$= "date" 0 @tparamGet $}
+<a href="http://localhost:8000/choosing.smscr">Kliknite za odabir pozadine<\a>
+</body>
+</html>
+
+
+package hr.fer.zemris.java.webserver.workers;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Random;
+
+import hr.fer.zemris.java.webserver.IWebWorker;
+import hr.fer.zemris.java.webserver.RequestContext;
+
+public class TimeWorker implements IWebWorker {
+
+	@Override
+	public void processRequest(RequestContext context) throws Exception {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date now = new Date();
+		
+		String dateAsString = sdf.format(now);
+		
+		
+		String choosenImgUrl = context.getTemporaryParameter(dateAsString);
+		
+		if(choosenImgUrl == null || choosenImgUrl.isEmpty()) {
+			Random random = new Random();
+			int index = random.nextInt() % 2;
+			
+			if(index % 2 == 0) {
+				 choosenImgUrl= "Pozadina1.png";
+				 
+			} else {
+				choosenImgUrl="Pozadina2.png";
+			}
+		}
+		
+		System.out.println(choosenImgUrl);
+		
+		context.setTemporaryParameter("background", choosenImgUrl);
+		
+		context.setTemporaryParameter("date", dateAsString);
+		context.setMimeType("text/html");
+		
+		context.getDispatcher().dispatchRequest("private/pages/time.smscr");
+	}
+
+	
+}
+ 
+
+Ovo je timeworker

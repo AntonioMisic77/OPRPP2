@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <style>
+   body {background-image: url('../images/{$= "background" 0 @tparamGet $}')}
+ </style>
+</head>
+<body>
+{$= "date" 0 @tparamGet $}
+<a href="http://localhost:8000/choosing.smscr">Kliknite za odabir pozadine<\a>
+</body>
+</html>

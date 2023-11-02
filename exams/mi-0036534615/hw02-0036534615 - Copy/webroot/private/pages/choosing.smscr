@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<body>
+ <form method="GET" action="/mi/vrijeme?background=pozadina">
+  <label>Choose whitch background would you like.</label>
+  <select name="pozadina">
+  <option value="Pozadina1.png">JAVA </option>
+  <option value="Pozadina2.png">POSTGRESQL </option>
+  </select>
+ </form>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<style>
+	 body {background-color: {$= "background" 0 @tparamGet $}}
+	</style>
+	</head>
+	<body>
+	
+	<a href="http://127.0.0.1:5721/scripts/osnovni.smscr"> Osnovni </a>
+	<br>
+	<a href="http://127.0.0.1:5721/scripts/brojPoziva.smscr"> Broj Poziva</a> 
+	<br>
+	<a href="http://127.0.0.1:5721/scripts/fibonaccih.smscr"> Fibonaccih </a>
+	<br>
+	<a href="http://127.0.0.1:5721/hello"> Hello </a>
+	
+	<form method="GET" action="/calc?a=firstNum&b=secondNum">
+		<label for="firstNum"> a </label>
+		<input type="number" name="firstNum">
+		
+		<br>
+		
+		<label for="secondNum"> b </label>
+		<input type="number" name="secondNum">
+		
+		<br>
+		
+	    <button type="submit">Submit</button>
+	</form>
+	
+	</body>
+</html>

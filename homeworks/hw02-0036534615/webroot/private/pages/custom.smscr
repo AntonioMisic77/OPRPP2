@@ -1,0 +1,11 @@
+<html>
+ <head>
+ <title>Dal cemo</title>
+ </head>
+ <body>
+ <h1>Slike finih koleginjica</h1>
+ <p>U nastavku su prikazane slike finih koleginjica.</p>
+ 
+ <img src="./images/{$= "slika" 0 @tparamGet  $}">
+ </body>
+</html>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;webapp-bazaorm/src/main/webapp/WEB-INF/pages/Blogs.jsp&apos; to &apos;Authors.jsp&apos;" description="Rename resource &apos;Blogs.jsp&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/main/webapp/WEB-INF/pages/Blogs.jsp" name="Authors.jsp" stamp="1685912941203" updateReferences="true"/>
+</session>

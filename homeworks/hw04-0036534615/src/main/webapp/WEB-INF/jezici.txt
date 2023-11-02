@@ -1,0 +1,7 @@
+Java	https://www.java.com/en/
+Python	https://www.python.org/
+C		https://en.wikipedia.org/wiki/C_(programming_language)
+C++		https://www.w3schools.com/cpp/cpp_intro.asp
+C#		https://learn.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/
+Go		https://go.dev/
+Assembly	https://en.wikipedia.org/wiki/Assembly_language

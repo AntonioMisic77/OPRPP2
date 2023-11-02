@@ -1,0 +1,2 @@
+band.txt	Glasanje za omiljeni bend	Od sljedecih bendova,koji Vam je bend najdrazi? Kliknite na link kako bi ste saznali
+jezici.txt   Glasanje za omiljeni programski jezik	Od sljedecih programskih jezika,koji Vam je najdrazi? Kliknite na link kako bi ste saznali

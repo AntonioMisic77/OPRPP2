@@ -1,0 +1,245 @@
+Postovni profesore.
+
+Rijesavao sam 2. zadatak, odnosno modificirao 5. zadacu. Nazalost nisam ju do kraja rijesio, no mislim da cete moci vidjeti neke funkcionalnosti sto ste trazili u zadatku
+
+
+Dodao sam novi entiti naziva BlogMessage
+
+package hr.fer.zemris.java.tecaj_13.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="blog_message")
+public class BlogMessage {
+
+	private Long id;
+	private String content;
+	private BlogUser user;
+	
+	
+	@Id @GeneratedValue
+	private Long getId() {
+		return this.id;
+	}
+	
+	@Column(nullable=false,length=100)
+	private String getContent() {
+		return this.content;
+	}
+	
+	
+	@ManyToOne
+	@JoinColumn(nullable=true)
+	private BlogUser getBlogUser() {
+		return this.user;
+	}
+	
+	
+	
+	public void setContent(String content) {
+		this.content = content;
+	}
+}
+
+
+Dodao sam novi servlet
+
+
+package hr.fer.zemris.java.tecaj_13.web.servlets;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import hr.fer.zemris.java.tecaj_13.dao.DAOProvider;
+import hr.fer.zemris.java.tecaj_13.model.BlogUser;
+
+@WebServlet("/servleti/author/*")
+public class AuthorServlet  extends HttpServlet{
+
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		 String path = req.getPathInfo();
+		 
+		 String nick = path.replace("/", "");
+		 
+		 BlogUser user = DAOProvider.getDAO().getBlogUserByNick(nick);
+		 
+		 req.setAttribute("bla", req.getSession().getAttribute("current.user.nick"));
+		 req.setAttribute("user", user);
+		 req.getServletContext().setAttribute("user.id", user.getId());
+		 
+	     req.getRequestDispatcher("/WEB-INF/pages/Author.jsp").forward(req, resp);
+	 }
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		 String path = req.getPathInfo();
+		 
+		 String[] splitedPath = req.getPathInfo().split("&");
+		 
+		 String message = splitedPath[1];
+		 
+		 Long id = (Long) req.getServletContext().getAttribute("user.id");
+		 
+		 DAOProvider.getDAO().storeMessage(message,id);
+		 
+		 resp.sendRedirect(req.getContextPath()+"/servleti/author");
+	 }
+}
+
+Novi author.jsp
+
+
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<html>
+  <body>
+  	<c:if test="${bla != null}">
+  		<span>${bla}</span>
+  		<a href="./logout">Logout</a>
+  	</c:if>
+  	<c:if test="${bla == null}">
+  		<span>Not loged in</span>
+  	</c:if>
+  	
+  	<br>
+  	<br>
+  	<br>
+  	<p> Hey checkout my page </p>
+	
+	<c:forEach var="e" items="${user.getEntries()}">
+		<p>${e.title}</p>
+		<span>${e.text}</span>
+		<br>
+	</c:forEach>
+	
+	<p>Leave a message to me if you want <p>
+	
+	<c:forEach var="el" items="${user.getMessages()}">
+	    <p>Some user said:  ${el.content}</p>
+	</c:forEach>
+	
+	<form method="POST" action="?">
+	   <input type="text" name="a">
+	   <button type="submit">Send</button>
+	</form>
+	
+  </body>
+</html>
+
+
+Modificirao sam Blog usera
+
+package hr.fer.zemris.java.tecaj_13.model;
+
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="blog_user")
+public class BlogUser {
+
+	@Id @GeneratedValue
+	private Long id;
+	
+	@Column(length=100,nullable=false)
+	private String firstName;
+	
+	@Column(length=100,nullable=false)
+	private String lastName;
+	
+	@Column(length=50,nullable=false,unique=true)
+	private String nick;
+	
+	@Column(length=100,nullable=false)
+	private String email;
+	
+	@Column(length=100,nullable=false)
+	private String passwordHash;
+	
+	@OneToMany(mappedBy="creator",fetch=FetchType.LAZY,cascade=CascadeType.PERSIST, orphanRemoval=true)
+	private List<BlogEntry> entries;
+	
+	@OneToMany(mappedBy="user",fetch=FetchType.LAZY,cascade=CascadeType.PERSIST, orphanRemoval=true)
+	private List<BlogMessage> messages;
+	
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getNick() {
+		return nick;
+	}
+
+	public void setNick(String nick) {
+		this.nick = nick;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPasswordHash() {
+		return passwordHash;
+	}
+
+	public void setPasswordHash(String passwordHash) {
+		this.passwordHash = passwordHash;
+	}
+	
+	public List<BlogEntry> getEntries(){
+		return this.entries;
+	}
+	
+	public List<BlogMessage> getMessages(){
+		return this.messages;
+	}
+}
+
+
+
